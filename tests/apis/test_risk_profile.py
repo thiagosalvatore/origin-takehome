@@ -114,3 +114,25 @@ def test_calculate_risk_profile_should_fail_missing_mandatory_fields(tst):
                                   'income': ['Missing data for required field.'],
                                   'marital_status': ['Missing data for required field.'],
                                   'risk_questions': ['Missing data for required field.']}}
+
+
+def test_calculate_risk_profile_should_work(tst):
+    payload = {
+        "age": 35,
+        "dependents": 2,
+        "house": {"ownership_status": "owned"},
+        "income": 0,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+    response = tst.client.post("/risk_profile/", data=json.dumps(payload),
+                               headers={"Content-Type": "application/json"})
+    r_json = response.json
+    assert response.status_code == 200, r_json
+    assert r_json == {
+        "auto": "economic",
+        "disability": "ineligible",
+        "home": "economic",
+        "life": "regular"
+    }
