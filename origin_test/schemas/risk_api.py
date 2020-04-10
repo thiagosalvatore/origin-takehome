@@ -1,4 +1,5 @@
-from marshmallow import fields
+from marshmallow import fields, Schema
+from marshmallow.validate import OneOf
 
 from origin_test.schemas.house import HouseSchema
 from origin_test.schemas.user import UserSchema
@@ -12,3 +13,10 @@ class RiskProfileCalculationSchema(UserSchema):
     """
     house = fields.Nested(HouseSchema)
     vehicle = fields.Nested(VehicleSchema)
+
+
+class RiskProfileSchema(Schema):
+    auto = fields.String(required=True, validate=OneOf(["regular, ineligible, economic, responsible"]))
+    disability = fields.String(required=True, validate=OneOf(["regular, ineligible, economic, responsible"]))
+    home = fields.String(required=True, validate=OneOf(["regular, ineligible, economic, responsible"]))
+    life = fields.String(required=True, validate=OneOf(["regular, ineligible, economic, responsible"]))

@@ -21,6 +21,11 @@ class RiskProfileService:
         }
 
     def calculate_age_score(self):
+        """
+        If the user is over 60 years old, she is ineligible for disability and life insurance.
+        If the user is under 30 years old, deduct 2 risk points from all lines of insurance.
+        If she is between 30 and 40 years old, deduct 1.
+        """
         age = self.profile["age"]
 
         if age > 60:
@@ -35,33 +40,58 @@ class RiskProfileService:
         return self.score
 
     def calculate_income_score(self):
-        if self.profile["income"] > 200000:
+        """
+        If the user doesn’t have income, she is ineligible for disability.
+        If her income is above $200k, deduct 1 risk point from all lines of insurance.
+        """
+        income = self.profile["income"]
+        if income == 0:
+            self.risk_profile["disability"] = "ineligible"
+        elif income > 200000:
             for key in self.score.keys():
                 self.score[key] -= 1
         return self.score
 
     def calculate_house_score(self):
+        """
+        If the user doesn’t have a house, she is ineligible for home insurance.
+        If the user's house is mortgaged, add 1 risk point to her home score and
+        add 1 risk point to her disability score.
+        :return:
+        """
         house = self.profile.get("house")
 
-        if house and house["ownership_status"] == "mortgaged":
+        if not house:
+            self.risk_profile["home"] = "ineligible"
+        elif house["ownership_status"] == "mortgaged":
             self.score["home"] += 1
             self.score["disability"] += 1
 
         return self.score
 
     def calculate_dependent_score(self):
+        """
+        If the user has dependents, add 1 risk point to both the disability and life scores.
+        """
         if self.profile["dependents"] > 0:
             self.score["disability"] += 1
             self.score["life"] += 1
         return self.score
 
     def calculate_relationship_score(self):
+        """
+        If the user is married, add 1 risk point to the life score and remove 1 risk point from disability.
+        """
         if self.profile["marital_status"] == "married":
             self.score["life"] += 1
             self.score["disability"] -= 1
         return self.score
 
     def calculate_vehicle_score(self):
+        """
+        If the user doesn’t have vehicles, she is auto insurance.
+        If the user's vehicle was produced in the last 5 years, add 1 risk point to that vehicle’s score.
+        """
         vehicle = self.profile.get("vehicle")
         current_year = datetime.now().year
         if vehicle:
@@ -69,6 +99,8 @@ class RiskProfileService:
             # Vehicles produced in the last 5 years
             if diff_year <= 5:
                 self.score["auto"] += 1
+        else:
+            self.risk_profile["auto"] = "ineligible"
         return self.score
 
     def set_risk_from_score(self):
@@ -84,23 +116,11 @@ class RiskProfileService:
         return self.risk_profile
 
     def calculate_risk_profile(self):
-        income = self.profile["income"]
-        house = self.profile.get("house")
-        vehicle = self.profile.get("vehicle")
-
-        if not income and not house and not vehicle:
-            self.risk_profile = {
-                "auto": "ineligible",
-                "disability": "ineligible",
-                "home": "ineligible",
-                "life": "ineligible"
-            }
-        else:
-            self.calculate_age_score()
-            self.calculate_income_score()
-            self.calculate_house_score()
-            self.calculate_dependent_score()
-            self.calculate_relationship_score()
-            self.calculate_vehicle_score()
+        self.calculate_age_score()
+        self.calculate_income_score()
+        self.calculate_house_score()
+        self.calculate_dependent_score()
+        self.calculate_relationship_score()
+        self.calculate_vehicle_score()
 
         return self.set_risk_from_score()

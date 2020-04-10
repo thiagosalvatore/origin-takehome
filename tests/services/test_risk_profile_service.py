@@ -143,7 +143,35 @@ def test_calculate_income_score_low_should_do_nothing():
     }
 
 
-def test_calculate_house_score_without_house_should_do_nothing():
+def test_calculate_income_score_no_income_should_be_ineligible():
+    profile = {
+        "age": 35,
+        "dependents": 1,
+        "house": {"ownership_status": "wrong"},
+        "income": 0,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+
+    rp_service = RiskProfileService(profile)
+    score = rp_service.calculate_income_score()
+
+    assert score == {
+        "auto": 0,
+        "disability": 0,
+        "home": 0,
+        "life": 0
+    }
+    assert rp_service.risk_profile == {
+        "auto": "economic",
+        "disability": "ineligible",
+        "home": "economic",
+        "life": "economic"
+    }
+
+
+def test_calculate_house_score_without_house_should_be_ineligible():
     profile = {
         "age": 35,
         "dependents": 1,
@@ -165,7 +193,7 @@ def test_calculate_house_score_without_house_should_do_nothing():
     assert rp_service.risk_profile == {
         "auto": "economic",
         "disability": "economic",
-        "home": "economic",
+        "home": "ineligible",
         "life": "economic"
     }
 
@@ -334,7 +362,7 @@ def test_calculate_marital_status_score_single_should_not_change_score():
     }
 
 
-def test_calculate_vehicle_status_score_without_vehicle_should_not_change_score():
+def test_calculate_vehicle_status_score_without_vehicle_should_be_ineligible():
     profile = {
         "age": 35,
         "dependents": 2,
@@ -353,7 +381,7 @@ def test_calculate_vehicle_status_score_without_vehicle_should_not_change_score(
         "life": 0
     }
     assert rp_service.risk_profile == {
-        "auto": "economic",
+        "auto": "ineligible",
         "disability": "economic",
         "home": "economic",
         "life": "economic"
@@ -449,4 +477,65 @@ def test_set_risk_from_score_should_work_with_ineligible():
         "disability": "regular",
         "home": "regular",
         "life": "ineligible"
+    }
+
+
+def test_calculate_risk_profile_should_work_without_income():
+    profile = {
+        "age": 35,
+        "dependents": 2,
+        "house": {"ownership_status": "owned"},
+        "income": 0,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+
+    rp_service = RiskProfileService(profile)
+    profile = rp_service.calculate_risk_profile()
+    assert profile == {
+        "auto": "economic",
+        "disability": "ineligible",
+        "home": "economic",
+        "life": "regular"
+    }
+
+
+def test_calculate_risk_profile_should_work_without_house():
+    profile = {
+        "age": 35,
+        "dependents": 2,
+        "income": 1000,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+
+    rp_service = RiskProfileService(profile)
+    profile = rp_service.calculate_risk_profile()
+    assert profile == {
+        "auto": "economic",
+        "disability": "economic",
+        "home": "ineligible",
+        "life": "regular"
+    }
+
+
+def test_calculate_risk_profile_should_work_without_vehicle():
+    profile = {
+        "age": 35,
+        "dependents": 2,
+        "income": 201000,
+        "marital_status": "married",
+        "house": {"ownership_status": "owned"},
+        "risk_questions": [0, 1, 0]
+    }
+
+    rp_service = RiskProfileService(profile)
+    profile = rp_service.calculate_risk_profile()
+    assert profile == {
+        "auto": "ineligible",
+        "disability": "economic",
+        "home": "economic",
+        "life": "economic"
     }
