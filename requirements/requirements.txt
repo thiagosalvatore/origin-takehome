@@ -4,6 +4,5 @@ flask-cors==3.0.8
 sentry-sdk[flask]==0.14.0
 flask-restplus==0.13.0
 simplejson==3.17.0
-pytz==2019.3
 marshmallow==3.5.1
 werkzeug==0.16
