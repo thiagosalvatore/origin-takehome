@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/thiagosalvatore/origin-takehome/tree/master.svg?style=shield)](https://circleci.com/gh/thiagosalvatore/origin-takehome/tree/master)
+
 # Origin Takehome
 
 ### Pre-Requisites
