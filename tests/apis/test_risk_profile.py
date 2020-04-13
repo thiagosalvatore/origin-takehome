@@ -1,6 +1,22 @@
 import json
 
 
+def test_calculate_risk_profile_should_fail_missing_content_type(tst):
+    payload = {
+        "age": -1,
+        "dependents": 2,
+        "house": {"ownership_status": "owned"},
+        "income": 0,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+    response = tst.client.post("/risk_profile/", data=json.dumps(payload))
+    r_json = response.json
+    assert response.status_code == 400, r_json
+    assert r_json == {'message': 'Content-Type must be "application/json"'}
+
+
 def test_calculate_risk_profile_should_fail_invalid_age(tst):
     payload = {
         "age": -1,

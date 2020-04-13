@@ -18,12 +18,13 @@
 ### How to run tests
 1. Install testing requirements `pip install -r requirements/testing.txt`
 2. Run `pytest` from the root folder of the project
+3. If you want to see code coverage, you can run `pytest --cov=origin_test tests/`
 
 
 ### Project Structure
-1. It uses Flask-RestPlus in order to manage the APIs and facilitate their creation (The project is now being replaced by flask-restx);
+1. This project uses Flask-RestPlus in order to manage the APIs and facilitate their creation (Flask-Restplus is now being replaced by flask-restx);
 2. Even though it is not being used in the project, I added sentry on the requirements, because it is really useful in production to trace bugs and exceptions;
-3. It uses `uwsgi` for production use only. uWSGI is used when we have a NGINX (or any other reversed proxy) in front of in order for it to talk with our application;
+3. It uses `uwsgi` on production. uWSGI is used when we have a NGINX (or any other reversed proxy) in front of in order for it to talk with our application;
 4. The project also uses `pytest` for unit and integration tests;
 5. The configs are loaded from the `config` folder, which is separated by environment (I usually have four environments: production, develop (or staging), development (localhost) and testing). The `default.py` file loads configs that are the same no matter what environment we are in. I usually use those files to load credentials from a vault (for example Amazon SSM) in order to avoid sensitive information on GitHub;
 6. The project uses `Marshmallow` from serialization and deserialization of JSON objects in Python. All schemas are located in the `schemas` folder. I also created a new decorator called `check_body` in the `utils/validations` folder. It can be added before any route definition in order to validate the body before everything;
@@ -38,4 +39,4 @@
 
 
 ### Important
-1. All endpoints has to have the `/` in the end, otherwise the server will return `301 - Redirect`
+1. All endpoints need the `/` in the end, otherwise the server will return `301 - Redirect`
