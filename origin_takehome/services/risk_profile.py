@@ -20,6 +20,12 @@ class RiskProfileService:
             "life": "economic"
         }
 
+    def calculate_base_score(self):
+        base_score = sum(self.profile["risk_questions"])
+        for key in self.score.keys():
+            self.score[key] = base_score
+        return self.score
+
     def calculate_age_score(self):
         """
         If the user is over 60 years old, she is ineligible for disability and life insurance.
@@ -116,6 +122,7 @@ class RiskProfileService:
         return self.risk_profile
 
     def calculate_risk_profile(self):
+        self.calculate_base_score()
         self.calculate_age_score()
         self.calculate_income_score()
         self.calculate_house_score()

@@ -147,7 +147,7 @@ def test_calculate_risk_profile_should_work(tst):
     r_json = response.json
     assert response.status_code == 200, r_json
     assert r_json == {
-        "auto": "economic",
+        "auto": "regular",
         "disability": "ineligible",
         "home": "economic",
         "life": "regular"

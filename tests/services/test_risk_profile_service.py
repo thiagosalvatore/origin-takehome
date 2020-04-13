@@ -3,6 +3,62 @@ from datetime import datetime
 from origin_takehome.services.risk_profile import RiskProfileService
 
 
+def test_calculate_base_score_should_return_3():
+    profile = {
+        "age": 35,
+        "dependents": 1,
+        "house": {"ownership_status": "wrong"},
+        "income": 1500,
+        "marital_status": "married",
+        "risk_questions": [1, 1, 1],
+        "vehicle": {"year": 2018}
+    }
+
+    rp_service = RiskProfileService(profile)
+    score = rp_service.calculate_base_score()
+
+    assert score == {
+        "auto": 3,
+        "disability": 3,
+        "home": 3,
+        "life": 3
+    }
+    assert rp_service.risk_profile == {
+        "auto": "economic",
+        "disability": "economic",
+        "home": "economic",
+        "life": "economic"
+    }
+
+
+def test_calculate_base_score_should_return_1():
+    profile = {
+        "age": 35,
+        "dependents": 1,
+        "house": {"ownership_status": "wrong"},
+        "income": 1500,
+        "marital_status": "married",
+        "risk_questions": [0, 1, 0],
+        "vehicle": {"year": 2018}
+    }
+
+    rp_service = RiskProfileService(profile)
+    score = rp_service.calculate_base_score()
+
+    assert score == {
+        "auto": 1,
+        "disability": 1,
+        "home": 1,
+        "life": 1
+    }
+    assert rp_service.risk_profile == {
+        "auto": "economic",
+        "disability": "economic",
+        "home": "economic",
+        "life": "economic"
+    }
+
+
 def test_calculate_age_score_should_deduct_one():
     profile = {
         "age": 35,
@@ -494,7 +550,7 @@ def test_calculate_risk_profile_should_work_without_income():
     rp_service = RiskProfileService(profile)
     profile = rp_service.calculate_risk_profile()
     assert profile == {
-        "auto": "economic",
+        "auto": "regular",
         "disability": "ineligible",
         "home": "economic",
         "life": "regular"
@@ -514,7 +570,7 @@ def test_calculate_risk_profile_should_work_without_house():
     rp_service = RiskProfileService(profile)
     profile = rp_service.calculate_risk_profile()
     assert profile == {
-        "auto": "economic",
+        "auto": "regular",
         "disability": "economic",
         "home": "ineligible",
         "life": "regular"
@@ -537,5 +593,5 @@ def test_calculate_risk_profile_should_work_without_vehicle():
         "auto": "ineligible",
         "disability": "economic",
         "home": "economic",
-        "life": "economic"
+        "life": "regular"
     }
