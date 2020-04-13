@@ -15,6 +15,11 @@
 3. The server will be running at port 8080 with nginx as reverse proxy
 4. This config is very similar to what we could use in production on Amazon ECS or Fargate, for example.
 
+
+### CI/CD Pipeline
+1. There is a tests pipeline setup on CircleCI in order to run all tests every time a new commit is sent to the repo;
+2. We could also add a deploy pipeline (build docker image, send it to the image repository, update the image on AWS, and so on);
+
 ### How to run tests
 1. Install testing requirements `pip install -r requirements/testing.txt`
 2. Run `pytest` from the root folder of the project
@@ -31,7 +36,6 @@
 7. There is also a `responses.py` file, that I created to make it possible for us to create custom responses based on some http errors (for example, bad request);
 8. There is a custom `api.py` within the `utils` folder. This custom api allows us to validate that all requests and responses has to be of type `application/json`, it also dumps all our responses that marshmallow deserialize.
 9. Finally, there are two other folders: `apis` that stores all APIs and routes definitions, and `services` that acts as `controllers`.
-
 
 ### Endpoints
 1. There is an endpoint `/health_check/`, that can be used by Kubernetes or Amazon ECS or Load Balancers in order to guarantee that the server is running;
