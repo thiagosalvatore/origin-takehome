@@ -5,7 +5,7 @@ from marshmallow import Schema
 from marshmallow.exceptions import ValidationError
 from werkzeug.exceptions import BadRequest
 
-from origin_test.utils.responses import badrequest
+from origin_takehome.utils.responses import badrequest
 
 
 def check_body(schema):

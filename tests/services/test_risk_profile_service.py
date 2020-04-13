@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from origin_test.services.risk_profile import RiskProfileService
+from origin_takehome.services.risk_profile import RiskProfileService
 
 
 def test_calculate_age_score_should_deduct_one():

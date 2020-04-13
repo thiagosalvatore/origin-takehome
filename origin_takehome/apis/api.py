@@ -1,8 +1,8 @@
 from flask import Blueprint
 
-from origin_test.apis.health_check import health_check_ns
-from origin_test.apis.risk_profile import risk_profile_ns
-from origin_test.utils.api import CustomAPI
+from origin_takehome.apis.health_check import health_check_ns
+from origin_takehome.apis.risk_profile import risk_profile_ns
+from origin_takehome.utils.api import CustomAPI
 
 origin_test_bp = Blueprint("origin_test_api", __name__)
 

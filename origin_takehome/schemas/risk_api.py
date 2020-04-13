@@ -1,9 +1,9 @@
 from marshmallow import fields, Schema
 from marshmallow.validate import OneOf
 
-from origin_test.schemas.house import HouseSchema
-from origin_test.schemas.user import UserSchema
-from origin_test.schemas.vehicle import VehicleSchema
+from origin_takehome.schemas.house import HouseSchema
+from origin_takehome.schemas.user import UserSchema
+from origin_takehome.schemas.vehicle import VehicleSchema
 
 
 class RiskProfileCalculationSchema(UserSchema):

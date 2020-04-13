@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from werkzeug.exceptions import InternalServerError, NotFound
 
-from origin_test.apis.api import origin_test_bp
+from origin_takehome.apis.api import origin_test_bp
 
 
 # from sentry_sdk.integrations.flask import FlaskIntegration

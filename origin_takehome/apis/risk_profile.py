@@ -1,8 +1,8 @@
 from flask_restplus import Namespace, Resource
 
-from origin_test.schemas.risk_api import RiskProfileCalculationSchema, RiskProfileSchema
-from origin_test.services.risk_profile import RiskProfileService
-from origin_test.utils.validations import check_body
+from origin_takehome.schemas.risk_api import RiskProfileCalculationSchema, RiskProfileSchema
+from origin_takehome.services.risk_profile import RiskProfileService
+from origin_takehome.utils.validations import check_body
 
 risk_profile_ns = Namespace("risk_profile")
 
